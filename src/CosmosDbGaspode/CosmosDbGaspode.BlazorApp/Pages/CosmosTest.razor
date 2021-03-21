@@ -1,0 +1,34 @@
+﻿@page "/CosmosTest"
+
+@namespace CosmosDbGaspode.Core
+
+<h1>Cosmos Test</h1>
+
+<p>Customer: @_customer.FirstName  @_customer.LastName</p>
+
+
+@code {
+
+    private Customer _customer = GetCustomer().Result;
+
+    private static async Task<Customer> GetCustomer()
+    {
+
+        var opts = new CosmosDbOptions
+        {
+            Account = "https://localhost:8081",
+            Key = "C2y6yDjf5/R+ob0N8A7Cgv30VRDJIWEHLM+4QDU5DE2nQ9nDuVTqobD4b8mGGyPMbIZnqyMsEcaGQy67XIw/Jw==",
+            DatabaseName = "cosmos-db-gaspode",
+            ContainerName = "Customers"
+        };
+
+        var client = CosmosDbClientFactory.Create(opts);
+
+        //var customer = new Customer { FirstName = "E1", LastName = "P1" };
+        //await client.Create(customer);
+
+        var customer = await client.GetById<Customer>("f094539f-f7d5-4b4a-a52d-c70632a2050c");
+        return customer;
+    }
+
+}
