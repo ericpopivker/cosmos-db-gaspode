@@ -1,0 +1,3 @@
+[submodule "src/CosmosDbGaspode/PandaTech.Infrastructure"]
+	path = src/CosmosDbGaspode/PandaTech.Infrastructure
+	url = https://github.com/ericpopivker/panda-tech-infrastructure
