@@ -35,9 +35,10 @@ namespace CosmosDbGaspode.Core
         }
 
 
-        public IQueryable<T> CreateQuery<T>()
+        public IOrderedQueryable<T> CreateQuery<T>()
         {
-            return _container.GetItemLinqQueryable<T>();
+            var query = _container.GetItemLinqQueryable<T>();
+            return query;
         }
 
 
@@ -69,6 +70,21 @@ namespace CosmosDbGaspode.Core
 
             return results;
         }
+
+
+        public async Task<int> GetCount<T>()
+        {
+            var query = CreateQuery<T>();
+            var response = await query.CountAsync();
+            return response;
+        }
+
+        public async Task<int> GetCount<T>(IOrderedQueryable<T> query)
+        {
+            var response =  await query.CountAsync();
+            return response;
+        }
+
 
         public async Task<T> GetById<T>(string id)
         {

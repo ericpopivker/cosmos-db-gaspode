@@ -4,6 +4,10 @@ using System.Linq;
 
 using NUnit.Framework;
 
+using System.Diagnostics;
+
+using Serilog;
+
 namespace CosmosDbGaspode.Core.Tests
 {
     public class BulkCosmosDbServiceTest
@@ -23,8 +27,10 @@ namespace CosmosDbGaspode.Core.Tests
         }
 
         [Test]
-        public async Task Create_1000_When_called_works()
+        public async Task Create_100_When_called_works()
         {
+            var stopwatch = Stopwatch.StartNew();
+
             var client = CosmosDbClientFactory.Create(Config.CosmosDbOptions);
             var bulkService = new BulkCosmosDbService(client);
 
@@ -42,9 +48,14 @@ namespace CosmosDbGaspode.Core.Tests
 
             await bulkService.Create(customers);
 
+            stopwatch.Stop();
+
+            Log.Information($"Duration to create 100 customers: {stopwatch.ElapsedMilliseconds}ms");
+
             var query = client.CreateQuery<Customer>();
-            int total = query.Count();
+            int total = await client.GetCount(query);
             Assert.AreEqual(100, total);
+
         }
     }
 }

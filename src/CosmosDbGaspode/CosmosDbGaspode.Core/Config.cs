@@ -4,6 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using Microsoft.Extensions.Configuration;
+
+using Serilog;
+
+using PandaTech.Infrastructure.Helpers;
+
 namespace CosmosDbGaspode.Core
 {
     public static class Config
@@ -16,5 +22,28 @@ namespace CosmosDbGaspode.Core
                 DatabaseName = "cosmos-db-gaspode",
                 ContainerName = "Customers"
            };
+
+        public static string TempDir
+        {
+            get { return _configuration.GetSection("TempDir").Value; }
+        }
+
+        public static string LogDir
+        {
+            get { return TempDir + "\\logs"; }
+        }
+
+
+        private static IConfiguration _configuration;
+        public static void Setup(IConfiguration configuration)
+        {
+            _configuration = configuration;
+        }
+
+
+        public static void WriteEnvInfoToLog()
+        {
+            Log.Information($"Environment: {EnvHelper.GetEnvironment().ToString()}");
+        }
     };
 }

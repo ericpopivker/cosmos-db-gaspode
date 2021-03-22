@@ -29,7 +29,7 @@ namespace CosmosDbGaspode.Core
             var query =_cosmosDbClient.CreateQuery<T>();
             var newQuery = query.Select(e => e.Id);
 
-            var ids = await _cosmosDbClient.Find(newQuery);
+            var ids = await _cosmosDbClient.Find<string>(newQuery);
 
             foreach (var id in ids)
             {
