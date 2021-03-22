@@ -24,13 +24,41 @@ namespace CosmosDbGaspode.Core
         {
             entity.Id = Guid.NewGuid().ToString();
 
-            var response = await _container.CreateItemAsync<T>(entity, new PartitionKey(entity.Id));
+            try
+            {
+                var response = await _container.CreateItemAsync<T>(entity, new PartitionKey(entity.Id));
+            }
+            catch (Exception e)
+            {
+                throw;
+            }
         }
 
 
-        public async Task<List<T>> Find<T>()
+        public IQueryable<T> CreateQuery<T>()
+        {
+            return _container.GetItemLinqQueryable<T>();
+        }
+
+
+        public async Task<List<T>> FindAll<T>()
         {
             var queryIterator = _container.GetItemLinqQueryable<T>().ToFeedIterator();
+            var results = new List<T>();
+
+            while (queryIterator.HasMoreResults)
+            {
+                var response = await queryIterator.ReadNextAsync();
+                results.AddRange(response.ToList());
+            }
+
+            return results;
+        }
+
+
+        public async Task<List<T>> Find<T>(IQueryable<T> query)
+        {
+            var queryIterator = query.ToFeedIterator();
             var results = new List<T>();
 
             while (queryIterator.HasMoreResults)
@@ -66,25 +94,6 @@ namespace CosmosDbGaspode.Core
             await _container.DeleteItemAsync<T>(id, new PartitionKey(id));
         }
 
-        public async Task DeleteAll()
-        {
-            var iterator =  _container.GetItemLinqQueryable<EntityBase>().Select(eb => eb.Id).ToFeedIterator();
-            var ids = new List<string>();
-
-            while (iterator.HasMoreResults)
-            {
-                foreach (var id in await iterator.ReadNextAsync())
-                {
-                    ids.Add(id);
-                }
-            }
-
-            foreach (var id in ids)
-            {
-                await _container.DeleteItemStreamAsync(id, new PartitionKey(id));
-            }
-
-        }
     }
 
 }

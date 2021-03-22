@@ -14,15 +14,7 @@ namespace CosmosDbGaspode.Core.Tests
         [Test]
         public async Task GetById_When_called_locally_works()
         {
-            var opts = new CosmosDbOptions
-            { 
-                Account = "https://localhost:8081",
-                Key = "C2y6yDjf5/R+ob0N8A7Cgv30VRDJIWEHLM+4QDU5DE2nQ9nDuVTqobD4b8mGGyPMbIZnqyMsEcaGQy67XIw/Jw==",
-                DatabaseName = "cosmos-db-gaspode",
-                ContainerName = "Customers"
-            };
-
-            var client = CosmosDbClientFactory.Create(opts);
+            var client = CosmosDbClientFactory.Create();
 
             //var customer = new Customer { FirstName = "E1", LastName = "P1" };
             //await client.Create(customer);

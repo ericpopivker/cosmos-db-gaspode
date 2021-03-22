@@ -10,6 +10,12 @@ namespace CosmosDbGaspode.Core
     {
         //From https://docs.microsoft.com/en-us/azure/cosmos-db/sql-api-dotnet-application
 
+        public static CosmosDbClient Create()
+        {
+            return Create(Config.CosmosDbOptions);
+        }
+        
+        
         public static CosmosDbClient Create(CosmosDbOptions cosmosDbOptions)
         {
             Microsoft.Azure.Cosmos.CosmosClient cosmosClient = new Microsoft.Azure.Cosmos.CosmosClient(cosmosDbOptions.Account, cosmosDbOptions.Key);
