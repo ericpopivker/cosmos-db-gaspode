@@ -71,6 +71,24 @@ namespace CosmosDbGaspode.Core
             return results;
         }
 
+        public async Task<List<T>> Find<T>(string query)
+        {
+            var queryDefinition = new QueryDefinition(query);
+
+            FeedIterator<T> queryIterator = _container.GetItemQueryIterator<T>(queryDefinition);
+
+            var results = new List<T>();
+
+            while (queryIterator.HasMoreResults)
+            {
+                var response = await queryIterator.ReadNextAsync();
+                results.AddRange(response.ToList());
+            }
+
+            return results;
+        }
+
+
 
         public async Task<int> GetCount<T>()
         {

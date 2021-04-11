@@ -11,7 +11,7 @@ namespace CosmosDbGaspode.Core.Tests
         public async Task Setup()
         {
             var client = CosmosDbClientFactory.Create(Config.CosmosDbOptions);
-            var bulkService =  new BulkCosmosDbService(client);
+            var bulkService =  new CosmosDbService(client);
             await bulkService.DeleteAll<Customer>();
         }
 
