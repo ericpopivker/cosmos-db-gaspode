@@ -32,7 +32,7 @@ So if you would like to use a proven, fast and well-tested product, go ahead and
 For open source, non profits and startups with less then 20 employees and less then 10 million a year revenue:
 
 
-For all other companies, you can buy a yearly unlimited license for $499.00
+For all other companies, you can buy a yearly unlimited license for $1499.00
 If you are interested, please send email to support@entechsolutions.com.
 
 
